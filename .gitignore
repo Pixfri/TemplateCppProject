@@ -1,0 +1,10 @@
+# Xmake cache
+.xmake/
+
+# CLion Cache
+.idea/
+
+build/
+cmake-build-debug/
+
+CmakeLists.txt
