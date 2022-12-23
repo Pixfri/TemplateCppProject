@@ -1,4 +1,4 @@
-# TemplateProjetCPlusPlus
+# TemplateCppProject
 This is just a simple template I use to generate a classic C++ project with xmake
 
 # Using this template
