@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - uses: action/checkout@v2
+      - uses: actions/checkout@v2
         name: Checkout
         
       - uses: xmake-io/github-action-setup-xmake@v1
