@@ -32,11 +32,11 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir debug-artifact
-          move build/debug-windows-x64/PixL/bin/ProjectName.exe debug-artifact/
-          move build/debug-windows-x64/PixL/bin/ProjectName.pdb debug-artifact/
+          move build/debug-windows-x64/ProjectName/bin/ProjectName.exe debug-artifact/
+          move build/debug-windows-x64/ProjectName/bin/ProjectName.pdb debug-artifact/
           
           mkdir release-artifact
-          move build/release-windows-x64/PixL/bin/ProjectName.exe release-artifact/
+          move build/release-windows-x64/ProjectName/bin/ProjectName.exe release-artifact/
           
       - uses: actions/upload-artifact@v2
         with:
