@@ -1,4 +1,4 @@
-set_xmakever("2.7.3")
+set_xmakever("2.7.4")
 
 set_project("ProjectName")
 set_version("0.0.0")
