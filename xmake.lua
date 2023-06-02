@@ -1,4 +1,4 @@
-set_xmakever("2.7.4")
+set_xmakever("2.7.9")
 
 set_project("ProjectName")
 set_version("0.0.0")
@@ -18,6 +18,6 @@ target("ProjectName")
     set_targetdir("build/" .. outputdir .. "/ProjectName/bin")
     set_objectdir("build/" .. outputdir .. "/ProjectName/obj")
 
-    add_files("ProjectName/src/**.cpp")
-    add_headerfiles("ProjectName/include/**.hpp", "ProjectName/include/**.h")
-    add_includedirs("ProjectName/include/", {public = true})
+    add_files("ProjectName/Source/**.cpp")
+    add_headerfiles("ProjectName/Include/**.hpp", "ProjectName/Include/**.h")
+    add_includedirs("ProjectName/Include/", {public = true})
