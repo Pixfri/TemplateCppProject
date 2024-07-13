@@ -43,20 +43,20 @@ jobs:
           if: startsWith(matrix.os, 'ubuntu')
           run: |
             mkdir linux-debug-artifact
-            move build/debug-linux-x64/ProjectName/bin/ProjectName linux-debug-artifact/
+            mv build/debug-linux-x64/ProjectName/bin/ProjectName linux-debug-artifact/
 
             mkdir linux-release-artifact
-            move build/release-linux-x64/ProjectName/bin/ProjectName linux-release-artifact/
+            mv build/release-linux-x64/ProjectName/bin/ProjectName linux-release-artifact/
 
 
         - name: Prepare MacOS artifacts
           if: startsWith(matrix.os, 'macos')
           run: |
             mkdir macos-debug-artifact
-            move build/debug-macos-x64/ProjectName/bin/ProjectName macos-debug-artifact/
+            mv build/debug-macos-x64/ProjectName/bin/ProjectName macos-debug-artifact/
 
             mkdir macos-release-artifact
-            move build/release-macos-x64/ProjectName/bin/ProjectName macos-release-artifact/
+            mv build/release-macos-x64/ProjectName/bin/ProjectName macos-release-artifact/
 
 
         - name: Prepare Windows artifacts
