@@ -1,0 +1,80 @@
+name: Build Targets
+
+on:
+    push:
+        paths-ignore:
+            - '.gitignore'
+            - 'LICENSE'
+            - 'README.md'
+    pull_request:
+        paths-ignore:
+            - '.gitignore'
+            - 'LICENSE'
+            - 'README.md'
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                os: [windows-latest, macos-latest, ubuntu-latest]
+
+        runs-on: ${{ matrix.os }}
+
+        steps:
+        - uses: actions/checkout@v4
+          name: Checkout
+
+        - uses: xmake-io/github-action-setup-xmake@v1
+          with:
+            xmake-version: latest
+          name: Setup XMake
+
+        - name: Build Debug
+          run: |
+            xmake f -m debug -y -v
+            xmake
+
+        - name: Build Release
+          run: |
+            xmake f -m release -y -v
+            xmake
+
+        - name: Prepare Linux artifacts
+          if: startsWith(matrix.os, 'ubuntu')
+          run: |
+            mkdir debug-artifact
+            move build/debug-linux-x64/ProjectName/bin/ProjectName debug-artifact/
+
+            mkdir release-artifact
+            move build/release-linux-x64/ProjectName/bin/ProjectName release-artifact/
+
+        - name: Prepare MacOS artifacts
+          if: startsWith(matrix.os, 'macos')
+          run: |
+            mkdir debug-artifact
+            move build/debug-macos-x64/ProjectName/bin/ProjectName debug-artifact/
+
+            mkdir release-artifact
+            move build/release-macos-x64/ProjectName/bin/ProjectName release-artifact/
+
+        - name: Prepare Windows artifacts
+          if: startsWith(matrix.os, 'windows')
+          run: |
+            mkdir debug-artifact
+            move build/debug-windows-x64/ProjectName/bin/ProjectName.exe debug-artifact/
+            move build/debug-windows-x64/ProjectName/bin/ProjectName.pdb debug-artifact/
+
+            mkdir release-artifact
+            move build/release-windows-x64/ProjectName/bin/ProjectName.exe release-artifact/
+
+        - uses: actions/upload-artifacts@v4
+          with:
+            name: windows-debug-${{ github.run_id }}
+            path: debug-artifact/
+          name: Upload windows debug artifact
+
+        - uses: actions/upload-artifacts@v4
+          with:
+            name: windows-release-${{ github.run_id }}
+            path: release-artifact/
+          name: Upload release artifact
