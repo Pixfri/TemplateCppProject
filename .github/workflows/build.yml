@@ -47,7 +47,7 @@ jobs:
 
             mkdir linux-release-artifact
             move build/release-linux-x64/ProjectName/bin/ProjectName linux-release-artifact/
-            
+
 
         - name: Prepare MacOS artifacts
           if: startsWith(matrix.os, 'macos')
@@ -70,39 +70,39 @@ jobs:
             move build/release-windows-x64/ProjectName/bin/ProjectName.exe windows-release-artifact/
 
 
-        - uses: actions/upload-artifacts@v3
+        - uses: actions/upload-artifact@v3
           with:
             name: linux-debug-${{ github.run_id }}
             path: linux-debug-artifact/
           name: Upload Linux debug artifact
 
-        - uses: actions/upload-artifacts@v3
+        - uses: actions/upload-artifact@v3
           with:
             name: linux-release-${{ github.run_id }}
             path: linux-release-artifact/
           name: Upload Linux release artifact
 
 
-        - uses: actions/upload-artifacts@v3
+        - uses: actions/upload-artifact@v3
           with:
             name: macos-debug-${{ github.run_id }}
             path: macos-debug-artifact/
           name: Upload MacOS debug artifact
 
-        - uses: actions/upload-artifacts@v3
+        - uses: actions/upload-artifact@v3
           with:
             name: macos-release-${{ github.run_id }}
             path: macos-release-artifact/
           name: Upload MacOS release artifact
 
         
-        - uses: actions/upload-artifacts@v3
+        - uses: actions/upload-artifact@v3
           with:
             name: windows-debug-${{ github.run_id }}
             path: windows-debug-artifact/
           name: Upload Windows debug artifact
 
-        - uses: actions/upload-artifacts@v3
+        - uses: actions/upload-artifact@v3
           with:
             name: windows-release-${{ github.run_id }}
             path: windows-release-artifact/
