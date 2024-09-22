@@ -8,16 +8,16 @@ set_allowedarchs("windows|x64", "linux|x64", "linux|x86_64", "macosx|x86_64")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx20")
-set_optimize("fastest")
 
-local outputdir = "$(mode)-$(os)-$(arch)"
+if is_mode("release") then
+  set_optimize("fastest")
+else
+  add_defines("PN_DEBUG")
+end
 
 target("ProjectName")
     set_kind("binary")
 
-    set_targetdir("build/" .. outputdir .. "/ProjectName/bin")
-    set_objectdir("build/" .. outputdir .. "/ProjectName/obj")
-
-    add_files("ProjectName/Source/**.cpp")
-    add_headerfiles("ProjectName/Include/**.hpp", "ProjectName/Include/**.h")
-    add_includedirs("ProjectName/Include/", {public = true})
+    add_files("Source/**.cpp")
+    add_headerfiles("Include/**.hpp", "Include/**.h")
+    add_includedirs("Include/", {public = true})
