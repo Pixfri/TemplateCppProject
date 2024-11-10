@@ -6,12 +6,12 @@ set_menu({
   usage = "xmake create-class [options] name",
   description = "Task to help class creation.",
   options = {
-    {
-      {nil, "nocpp", "k", nil, "Set this to create a header-only class."},
-      {nil, "name", "v", nil, "Class name"}
-    }
+    {nil, "nocpp", "k", nil, "Set this to create a header-only class."},
+    {nil, "name", "v", nil, "Class name"}
   }
 })
+
+local project = ProjectName
 
 on_run(function()
   import("core.base.option")
@@ -24,19 +24,20 @@ on_run(function()
   local className = path.basename(classPath)
 
   local files = {
-    { TargetPath = path.join("Include/ProjectName", classPath) .. ".hpp", Template = headerTemplate },
-    { TargetPath = path.join("Include/ProjectName", classPath) .. ".inl", Template = inlineTemplate }
+    { TargetPath = path.join("Include", project, classPath) .. ".hpp", Template = headerTemplate },
+    { TargetPath = path.join("Include", project, classPath) .. ".inl", Template = inlineTemplate }
   }
 
   if not option.get("nocpp") then
-    table.insert(files, {TargetPath = path.join("Source", "ProjectName", classPath) .. ".cpp", Template = sourceTemplate})
+    table.insert(files, {TargetPath = path.join("Source", project, classPath) .. ".cpp", Template = sourceTemplate})
   end
 
   local replacements = {
     CLASS_NAME = className,
     CLASS_PATH = classPath,
     COPYRIGHT = os.date("%Y") .. [[ Jean "Pixfri" Letessier ]],
-    HEADER_GUARD = "PN_" .. classPath:gsub("[/\\]", "_"):upper() .. "_HPP"
+    HEADER_GUARD = "PN_" .. classPath:gsub("[/\\]", "_"):upper() .. "_HPP",
+    PROJECT = project
   }
 
   for _, file in pairs(files) do
@@ -55,7 +56,7 @@ end)
 
 headerTemplate = [[
 // Copyright (C) %COPYRIGHT%
-// This file is part of ProjectName.
+// This file is part of %PROJECT%.
 // For conditions of distribution and use, see copyright notice in LICENSE.
 
 #pragma once
@@ -63,7 +64,7 @@ headerTemplate = [[
 #ifndef %HEADER_GUARD%
 #define %HEADER_GUARD%
 
-namespace ProjectName {
+namespace %PROJECT% {
     class %CLASS_NAME% {
     public:
         %CLASS_NAME%() = default;
@@ -79,31 +80,31 @@ namespace ProjectName {
     };
 }
 
-#include "ProjectName/%CLASS_PATH%.inl"
+#include <%PROJECT%/%CLASS_PATH%.inl>
 
 #endif // %HEADER_GUARD%
 ]]
 
 inlineTemplate = [[
 // Copyright (C) %COPYRIGHT%
-// This file is part of ProjectName.
+// This file is part of %PROJECT%.
 // For conditions of distribution and use, see copyright notice in LICENSE.
 
 #pragma once
 
-namespace ProjectName {
+namespace %PROJECT% {
     
 }
 ]]
 
 sourceTemplate = [[
 // Copyright (C) %COPYRIGHT%
-// This file is part of ProjectName.
+// This file is part of %PROJECT%.
 // For conditions of distribution and use, see copyright notice in LICENSE.
 
-#include "ProjectName/%CLASS_PATH%.hpp"
+#include <%PROJECT%/%CLASS_PATH%.hpp>
 
-namespace ProjectName {
+namespace %PROJECT% {
     
 }
 ]]

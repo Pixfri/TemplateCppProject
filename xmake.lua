@@ -1,6 +1,8 @@
 set_xmakever("2.9.3")
 
-set_project("ProjectName")
+ProjectName = "ProjectName"
+
+set_project(ProjectName)
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx20")
@@ -14,9 +16,10 @@ add_rules("plugin.vsxmake.autoupdate")
 if is_mode("release") then
   set_fpmodels("fast")
   set_optimize("fastest")
-  set_symbols("debug", "hidden")
+  set_symbols("hidden")
 else
   add_defines("PN_DEBUG")
+  set_symbols("debug")
 end
 
 set_encodings("utf-8")
@@ -34,7 +37,7 @@ end
 
 add_cxflags("-Wno-missing-field-initializers -Werror=vla", {tools = {"clang", "gcc"}})
 
-target("ProjectName")
+target(ProjectName)
   set_kind("binary")
   
   add_files("Source/**.cpp")
@@ -44,3 +47,5 @@ target("ProjectName")
   end
   
   add_rpathdirs("$ORIGIN")
+
+includes("xmake/**.lua")
