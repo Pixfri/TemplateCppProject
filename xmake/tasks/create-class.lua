@@ -3,55 +3,58 @@ local headerTemplate, inlineTemplate, sourceTemplate
 task("create-class")
 
 set_menu({
-  usage = "xmake create-class [options] name",
-  description = "Task to help class creation.",
-  options = {
-    {nil, "nocpp", "k", nil, "Set this to create a header-only class."},
-    {nil, "name", "v", nil, "Class name"}
-  }
+	usage = "xmake create-class [options] name",
+	description = "Task to help class creation.",
+	options = {
+		{ nil, "nocpp", "k", nil, "Set this to create a header-only class." },
+		{ nil, "name", "v", nil, "Class name" },
+	},
 })
 
 local project = ProjectName
 
 on_run(function()
-  import("core.base.option")
+	import("core.base.option")
 
-  local classPath = option.get("name")
-  if not classPath then
-    os.raise("Missing class name")
-  end
+	local classPath = option.get("name")
+	if not classPath then
+		os.raise("Missing class name")
+	end
 
-  local className = path.basename(classPath)
+	local className = path.basename(classPath)
 
-  local files = {
-    { TargetPath = path.join("Include", project, classPath) .. ".hpp", Template = headerTemplate },
-    { TargetPath = path.join("Include", project, classPath) .. ".inl", Template = inlineTemplate }
-  }
+	local files = {
+		{ TargetPath = path.join("Include", project, classPath) .. ".hpp", Template = headerTemplate },
+		{ TargetPath = path.join("Include", project, classPath) .. ".inl", Template = inlineTemplate },
+	}
 
-  if not option.get("nocpp") then
-    table.insert(files, {TargetPath = path.join("Source", project, classPath) .. ".cpp", Template = sourceTemplate})
-  end
+	if not option.get("nocpp") then
+		table.insert(
+			files,
+			{ TargetPath = path.join("Source", project, classPath) .. ".cpp", Template = sourceTemplate }
+		)
+	end
 
-  local replacements = {
-    CLASS_NAME = className,
-    CLASS_PATH = classPath,
-    COPYRIGHT = os.date("%Y") .. [[ Jean "Pixfri" Letessier ]],
-    HEADER_GUARD = "PN_" .. classPath:gsub("[/\\]", "_"):upper() .. "_HPP",
-    PROJECT = project
-  }
+	local replacements = {
+		CLASS_NAME = className,
+		CLASS_PATH = classPath,
+		COPYRIGHT = os.date("%Y") .. [[ Jean "Pixfri" Letessier ]],
+		HEADER_GUARD = "PN_" .. classPath:gsub("[/\\]", "_"):upper() .. "_HPP",
+		PROJECT = project,
+	}
 
-  for _, file in pairs(files) do
-    local content = file.Template:gsub("%%([%u_]+)%%", function (kw)
-      local r = replacements[kw]
-      if not r then
-        os.raise("Missing replacement for " .. kw)
-      end
+	for _, file in pairs(files) do
+		local content = file.Template:gsub("%%([%u_]+)%%", function(kw)
+			local r = replacements[kw]
+			if not r then
+				os.raise("Missing replacement for " .. kw)
+			end
 
-      return r
-    end)
+			return r
+		end)
 
-    io.writefile(file.TargetPath, content)
-  end
+		io.writefile(file.TargetPath, content)
+	end
 end)
 
 headerTemplate = [[
@@ -91,6 +94,8 @@ inlineTemplate = [[
 // For conditions of distribution and use, see copyright notice in LICENSE.
 
 #pragma once
+
+#include <%PROJECT%/%CLASS_PATH%.hpp>
 
 namespace %PROJECT% {
     
